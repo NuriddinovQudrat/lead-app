@@ -24,6 +24,8 @@ import { visaOptions } from '@/constants/visa-options';
 import Image from 'next/image';
 import { usePage } from './use-page';
 import { LogInIcon } from 'lucide-react';
+import Link from 'next/link';
+import { ROUTER } from '@/constants/router';
 
 export default function Home() {
     const { form, onSubmit } = usePage();
@@ -31,9 +33,11 @@ export default function Home() {
     return (
         <div className='min-h-screen container mx-auto p-5'>
             <div className='text-right'>
-                <Button className='text-xs'>
-                    <LogInIcon /> Admin
-                </Button>
+                <Link href={ROUTER.ADMIN}>
+                    <Button className='text-xs'>
+                        <LogInIcon /> Admin
+                    </Button>
+                </Link>
             </div>
             <div className='text-center py-20'>
                 <h2 className='lg:text-4xl text-2xl font-bold'>

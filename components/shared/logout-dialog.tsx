@@ -9,6 +9,8 @@ import {
     AlertDialogCancel,
     AlertDialogAction,
 } from '../ui/alert-dialog';
+import { useRouter } from 'next/navigation';
+import { ROUTER } from '@/constants/router';
 
 interface LogoutDialogProps {
     isOpenDialog: boolean;
@@ -16,7 +18,13 @@ interface LogoutDialogProps {
 }
 
 const LogoutDialog = ({ isOpenDialog, setIsOpenDialog }: LogoutDialogProps) => {
-    const logOut = useUserStore(state => state.setClearUser);
+    const router = useRouter();
+    const clearUser = useUserStore(state => state.setClearUser);
+
+    const logOut = () => {
+        clearUser();
+        router.push(ROUTER.HOME);
+    };
 
     return (
         <AlertDialog open={isOpenDialog}>
