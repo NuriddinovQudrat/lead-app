@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lead Management API
 
-## Getting Started
+This is a simple API to manage leads, including creating, viewing, and updating the status of leads. The API is built using Next.js API routes.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **GET** `/api/leads` - Retrieve a list of all leads.
+- **POST** `/api/leads` - Create a new lead.
+- **PUT** `/api/leads` - Update the status of an existing lead.
+
+## Accessing the Admin Page
+
+To access the admin page, use the following credentials:
+
+- **Username**: `qudrat`
+- **Password**: `12345678`
+
+## API Endpoints
+
+### 1. **GET** `/api/leads`
+
+Retrieves all leads.
+
+#### Response
+
+```json
+{
+    "leads": [
+        {
+            "id": "1234567890",
+            "first_name": "Qudratjon",
+            "last_name": "Nuriddinov",
+            "email": "qudratjonnuriddinov2603@gmail.com",
+            "linkedin": "https://www.linkedin.com/in/nuriddinovqudratjon",
+            "citizenship": "Uzbekistan",
+            "visas": "0-1",
+            "additional": "TEST",
+            "status": "pending",
+            "created_at": "2025-03-09T12:34:56Z"
+        }
+    ]
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Key Sections Added:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Admin Page Access**: Instructions for accessing the admin page with the provided username and password.
+2. **Deployed Domain**: The live domain where the application is hosted: `leads-app.qudratjon.uz`.
+3. **Libraries Used**: Lists the libraries used in the project (`Next.js`, `TypeScript`, `TailwindCSS`, `Shadcn UI`).
