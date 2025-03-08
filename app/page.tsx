@@ -3,10 +3,10 @@ import { Button } from '@/components/ui/button';
 
 export default function Home() {
     return (
-        <div className='flex min-h-screen flex-col'>
-            <header className='bg-primary py-6'>
+        <div className='flex min-h-screen flex-col mx-auto container'>
+            <header className='py-6'>
                 <div className='container flex items-center justify-between'>
-                    <h1 className='text-2xl font-bold text-white'>Lead Management System</h1>
+                    <h1 className='text-2xl font-bold'>Lead Management System</h1>
                     <Link href='/login'>
                         <Button variant='secondary'>Admin Login</Button>
                     </Link>

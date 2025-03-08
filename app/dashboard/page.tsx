@@ -2,10 +2,10 @@ import { LeadManagementDashboard } from '@/components/lead-management-dashboard'
 
 export default function DashboardPage() {
     return (
-        <div className='flex min-h-screen flex-col'>
-            <header className='border-b bg-primary py-4'>
+        <div className='flex min-h-screen flex-col mx-auto container'>
+            <header className='border-b py-4'>
                 <div className='container'>
-                    <h1 className='text-2xl font-bold text-white'>Lead Management Dashboard</h1>
+                    <h1 className='text-2xl font-bold'>Lead Management Dashboard</h1>
                 </div>
             </header>
 

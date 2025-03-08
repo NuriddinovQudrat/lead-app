@@ -2,10 +2,10 @@ import { LeadSubmissionForm } from '@/components/lead-submission-form';
 
 export default function SubmitPage() {
     return (
-        <div className='flex min-h-screen flex-col'>
-            <header className='bg-primary py-6'>
+        <div className='flex min-h-screen mx-auto container flex-col'>
+            <header className='py-6'>
                 <div className='container'>
-                    <h1 className='text-2xl font-bold text-white'>Lead Submission Form</h1>
+                    <h1 className='text-2xl font-bold text-center'>Lead Submission Form</h1>
                 </div>
             </header>
 
