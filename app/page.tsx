@@ -28,10 +28,9 @@ export default function Home() {
     const { form, onSubmit } = usePage();
 
     return (
-        <div className='min-h-screen container mx-auto sm:p-5 p-2'>
-            {/* TOP */}
+        <div className='min-h-screen container mx-auto p-5'>
             <div className='text-center py-20'>
-                <h2 className='lg:text-5xl text-3xl font-bold'>
+                <h2 className='lg:text-4xl text-2xl font-bold'>
                     Get An Assesment Of Your Immigration Case
                 </h2>
             </div>
