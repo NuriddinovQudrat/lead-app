@@ -1,9 +1,10 @@
 'use client';
 
-import type React from 'react';
-
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 import { Loader2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -15,35 +16,36 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+
+const formSchema = z.object({
+    email: z.string().email({ message: 'Please enter a valid email address.' }),
+    password: z.string().min(6, { message: 'Password must be at least 6 characters.' }),
+});
+
+type FormValues = z.infer<typeof formSchema>;
 
 export function LoginForm() {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError('');
+    const form = useForm<FormValues>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            email: '',
+            password: '',
+        },
+    });
 
-        if (!email || !password) {
-            setError('Please enter both email and password');
-            return;
-        }
-
-        if (!/\S+@\S+\.\S+/.test(email)) {
-            setError('Please enter a valid email address');
-            return;
-        }
-
-        if (password.length < 6) {
-            setError('Password must be at least 6 characters');
-            return;
-        }
-
+    async function onSubmit(data: FormValues) {
         setIsLoading(true);
 
         try {
@@ -52,15 +54,18 @@ export function LoginForm() {
 
             // For demo purposes, accept any login with valid format
             localStorage.setItem('isAuthenticated', 'true');
-            localStorage.setItem('user', JSON.stringify({ email }));
+            localStorage.setItem('user', JSON.stringify({ email: data.email }));
 
             router.push('/dashboard');
         } catch (error) {
-            setError('Login failed. Please try again.');
+            console.error('Login error:', error);
+            form.setError('root', {
+                message: 'Login failed. Please try again.',
+            });
         } finally {
             setIsLoading(false);
         }
-    };
+    }
 
     return (
         <Card className='w-full'>
@@ -71,42 +76,51 @@ export function LoginForm() {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <form onSubmit={handleSubmit} className='space-y-4'>
-                    <div className='space-y-2'>
-                        <Label htmlFor='email'>Email</Label>
-                        <Input
-                            id='email'
-                            type='email'
-                            placeholder='admin@example.com'
-                            value={email}
-                            onChange={e => setEmail(e.target.value)}
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+                        <FormField
+                            control={form.control}
+                            name='email'
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Email</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder='admin@example.com' {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
                         />
-                    </div>
-
-                    <div className='space-y-2'>
-                        <Label htmlFor='password'>Password</Label>
-                        <Input
-                            id='password'
-                            type='password'
-                            placeholder='••••••'
-                            value={password}
-                            onChange={e => setPassword(e.target.value)}
+                        <FormField
+                            control={form.control}
+                            name='password'
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Password</FormLabel>
+                                    <FormControl>
+                                        <Input type='password' placeholder='••••••' {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
                         />
-                    </div>
-
-                    {error && <p className='text-sm text-red-500'>{error}</p>}
-
-                    <Button type='submit' className='w-full' disabled={isLoading}>
-                        {isLoading ? (
-                            <>
-                                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-                                Logging in...
-                            </>
-                        ) : (
-                            'Login'
+                        {form.formState.errors.root && (
+                            <p className='text-sm font-medium text-destructive'>
+                                {form.formState.errors.root.message}
+                            </p>
                         )}
-                    </Button>
-                </form>
+                        <Button type='submit' className='w-full' disabled={isLoading}>
+                            {isLoading ? (
+                                <>
+                                    <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                                    Logging in...
+                                </>
+                            ) : (
+                                'Login'
+                            )}
+                        </Button>
+                    </form>
+                </Form>
             </CardContent>
             <CardFooter className='flex justify-center'>
                 <p className='text-sm text-muted-foreground'>
