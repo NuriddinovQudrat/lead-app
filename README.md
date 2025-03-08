@@ -48,7 +48,7 @@ Returns a list of all leads.
 To install and run the project locally:
 
 1️⃣ Clone the repository:
-git clone https://github.com/yourusername/lead-management-api.git
+git clone https://github.com/NuriddinovQudrat/lead-app
 cd lead-management-api
 
 2️⃣ Install dependencies:
