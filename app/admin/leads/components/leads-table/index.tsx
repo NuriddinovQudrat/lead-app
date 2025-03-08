@@ -8,8 +8,18 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { leadsList } from '@/public/data/leads-list';
+import { LeadProps } from '@/types/leads';
+import { AxiosError } from 'axios';
 
-const LeadsTable = () => {
+interface LeadsTableProps {
+    isLoading: boolean;
+    error: AxiosError | null;
+    data: LeadProps[];
+}
+
+const LeadsTable = (props: LeadsTableProps) => {
+    const { isLoading, error, data } = props;
+
     return (
         <div className='overflow-scroll'>
             <Table>
@@ -22,29 +32,29 @@ const LeadsTable = () => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {false ? (
+                    {isLoading ? (
                         <TableRow>
                             <TableCell colSpan={4}>
                                 <Loader className='h-auto' />
                             </TableCell>
                         </TableRow>
-                    ) : leadsList.length > 0 ? (
-                        leadsList?.map(item => {
+                    ) : data.length > 0 ? (
+                        data?.map(item => {
                             return (
                                 <TableRow key={item?.id}>
                                     <TableCell>
                                         {item.first_name} {item.last_name}
                                     </TableCell>
-                                    <TableCell>{item.submitted_at}</TableCell>
+                                    <TableCell>{item.created_at}</TableCell>
                                     <TableCell>{item.status}</TableCell>
-                                    <TableCell>{item.country}</TableCell>
+                                    <TableCell>{item.citizenship}</TableCell>
                                 </TableRow>
                             );
                         })
                     ) : (
                         <TableRow>
-                            <TableCell colSpan={4}>
-                                <span className='text-muted-foreground'>Ma'lumot mavjud emas</span>
+                            <TableCell colSpan={4} className='text-center'>
+                                <span className='text-muted-foreground'>No data</span>
                             </TableCell>
                         </TableRow>
                     )}

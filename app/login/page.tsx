@@ -19,12 +19,21 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { usePage } from './use-page';
+import Link from 'next/link';
+import { ROUTER } from '@/constants/router';
+import { Home } from 'lucide-react';
 
 export default function LoginPage() {
     const { form, onSubmit, isLoading } = usePage();
 
     return (
-        <div className='flex min-h-screen justify-center items-center'>
+        <div className='flex min-h-screen relative p-5 justify-center items-center'>
+            <Link href={ROUTER.HOME} className='absolute top-5 right-5'>
+                <Button className='text-xs'>
+                    <Home />
+                    Home
+                </Button>
+            </Link>
             <Card className='w-96 rounded-md'>
                 <CardHeader className='space-y-1'>
                     <CardTitle className='text-2xl'>Admin Login</CardTitle>

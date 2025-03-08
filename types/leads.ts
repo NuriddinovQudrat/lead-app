@@ -3,7 +3,10 @@ export interface LeadProps {
     first_name: string;
     last_name: string;
     email: string;
-    country: string;
+    linkedin: string;
+    citizenship: string;
+    visas: any;
+    additional: string;
     status: string;
-    submitted_at: string;
+    created_at: string;
 }

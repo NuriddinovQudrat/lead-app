@@ -6,14 +6,14 @@ import { usePage } from './use-page';
 import LeadsTable from './components/leads-table';
 
 const Leads = () => {
-    const { form } = usePage();
+    const { form, isLoading, data, error } = usePage();
 
     return (
         <FormProvider {...form}>
             <div className='grid gap-4'>
                 <h1 className='text-2xl font-bold'>Leads</h1>
                 <Filter />
-                <LeadsTable />
+                <LeadsTable isLoading={isLoading} data={data} error={error} />
             </div>
         </FormProvider>
     );
