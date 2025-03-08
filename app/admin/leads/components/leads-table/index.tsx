@@ -8,13 +8,12 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { leadsList } from '@/public/data/leads-list';
 import { LeadProps } from '@/types/leads';
 import { setUTCTime } from '@/utils/date';
 import { AxiosError } from 'axios';
 import { Edit } from 'lucide-react';
-import UpdateLeadDialog from '../update-lead-dialog';
 import { useState } from 'react';
+import UpdateLeadDialog from '../update-lead-dialog';
 
 interface LeadsTableProps {
     isLoading: boolean;

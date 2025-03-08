@@ -1,27 +1,29 @@
 # Lead Management API
 
-This is a simple API to manage leads, including creating, viewing, and updating the status of leads. The API is built using Next.js API routes.
+A simple API to manage leads, including creating, viewing, and updating their status. Built with **Next.js API routes**.
 
-## Features
+## 🚀 Features
 
-- **GET** `/api/leads` - Retrieve a list of all leads.
+- **GET** `/api/leads` - Retrieve all leads.
 - **POST** `/api/leads` - Create a new lead.
-- **PUT** `/api/leads` - Update the status of an existing lead.
+- **PUT** `/api/leads/:id` - Update the status of a lead.
 
-## Accessing the Admin Page
+## 🔐 Admin Panel Access
 
-To access the admin page, use the following credentials:
+To access the admin page:
 
 - **Username**: `qudrat`
 - **Password**: `12345678`
 
-## API Endpoints
+Visit: [`leads-app.qudratjon.uz/admin`](https://leads-app.qudratjon.uz/admin)
 
-### 1. **GET** `/api/leads`
+## 🔗 API Endpoints
 
-Retrieves all leads.
+### ➤ **GET** `/api/leads`
 
-#### Response
+Returns a list of all leads.
+
+#### ✅ Example Response
 
 ```json
 {
@@ -42,8 +44,43 @@ Retrieves all leads.
 }
 ```
 
-### Key Sections Added:
+🛠 Setup & Installation
+To install and run the project locally:
 
-1. **Admin Page Access**: Instructions for accessing the admin page with the provided username and password.
-2. **Deployed Domain**: The live domain where the application is hosted: `leads-app.qudratjon.uz`.
-3. **Libraries Used**: Lists the libraries used in the project (`Next.js`, `TypeScript`, `TailwindCSS`, `Shadcn UI`).
+1️⃣ Clone the repository:
+git clone https://github.com/yourusername/lead-management-api.git
+cd lead-management-api
+
+2️⃣ Install dependencies:
+npm install --force
+
+3️⃣ Run the development server:
+npm run dev
+
+➡ The app will be available at http://localhost:3000.
+
+🌍 Deployment
+This project is live at:
+
+🔗 leads-app.qudratjon.uz
+
+📦 Libraries Used
+Next.js - Framework for API and frontend.
+TypeScript - Static typing for better maintainability.
+Tailwind CSS - Utility-first CSS for styling.
+ShadCN UI - Modern UI components.
+
+📄 License
+This project is licensed under the MIT License.
+
+✨ Feel free to contribute and improve the project! 🚀
+
+### 🔥 Refactored Improvements:
+
+✔ **Concise and structured formatting**  
+✔ **API examples for easy understanding**  
+✔ **Clear installation steps**  
+✔ **Deployment details**  
+✔ **Formatted headings for readability**
+
+Let me know if you need further refinements! 🚀
