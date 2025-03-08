@@ -10,7 +10,7 @@ const Leads = () => {
 
     return (
         <FormProvider {...form}>
-            <div className='grid gap-2'>
+            <div className='grid gap-4'>
                 <h1 className='text-2xl font-bold'>Leads</h1>
                 <Filter />
                 <LeadsTable />
