@@ -3,7 +3,6 @@ import { clearUser, getUser, setUserToCookie } from '@/utils/user';
 import { create } from 'zustand';
 
 interface UserStoreProps {
-    user: any;
     hasAccess: boolean;
     setUser: (user: AuthTokenProps) => void;
     setClearUser: () => void;
@@ -14,10 +13,10 @@ export const useUserStore = create<UserStoreProps>(set => ({
     hasAccess: !!getUser()?.token,
     setUser: user => {
         setUserToCookie(user);
-        set({ hasAccess: true, user: user });
+        set({ hasAccess: true });
     },
     setClearUser: () => {
         clearUser();
-        set({ hasAccess: false, user: undefined });
+        set({ hasAccess: false });
     },
 }));
