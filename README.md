@@ -49,7 +49,7 @@ To install and run the project locally:
 
 1️⃣ Clone the repository:
 git clone https://github.com/NuriddinovQudrat/lead-app
-cd lead-management-api
+cd lead-app
 
 2️⃣ Install dependencies:
 npm install --force
