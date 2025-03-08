@@ -1,224 +1,257 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { ArrowRightIcon, LogOutIcon, SearchIcon, UserIcon } from 'lucide-react';
+import { useState } from 'react';
+import { ChevronDown, ChevronRight, SearchIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
-import { LeadDetails } from '@/components/lead-details';
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 
 type Lead = {
     id: string;
     firstName: string;
     lastName: string;
     email: string;
-    linkedinProfile: string;
-    visasOfInterest: string[];
-    resumeFilename: string;
-    additionalInfo: string;
-    status: 'PENDING' | 'REACHED_OUT';
-    createdAt: string;
+    country: string;
+    status: 'Pending' | 'Reached Out';
+    submittedAt: string;
 };
 
+const ITEMS_PER_PAGE = 8;
+
 export function LeadManagementDashboard() {
-    const router = useRouter();
-    const [leads, setLeads] = useState<Lead[]>([]);
-    const [filteredLeads, setFilteredLeads] = useState<Lead[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
-    const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [statusFilter, setStatusFilter] = useState<string>('all');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [sortConfig, setSortConfig] = useState<{
+        key: keyof Lead;
+        direction: 'asc' | 'desc';
+    }>({ key: 'submittedAt', direction: 'desc' });
 
-    // Authentication check
-    useEffect(() => {
-        const authStatus = localStorage.getItem('isAuthenticated');
-        if (authStatus !== 'true') {
-            router.push('/login');
-        } else {
-            setIsAuthenticated(true);
+    // Mock data
+    const mockLeads: Lead[] = [
+        {
+            id: '1',
+            firstName: 'Jorge',
+            lastName: 'Ruiz',
+            email: 'jorge@example.com',
+            country: 'Mexico',
+            status: 'Pending',
+            submittedAt: '02/02/2024, 2:45 PM',
+        },
+        {
+            id: '2',
+            firstName: 'Bahar',
+            lastName: 'Zamir',
+            email: 'bahar@example.com',
+            country: 'Mexico',
+            status: 'Pending',
+            submittedAt: '02/02/2024, 2:45 PM',
+        },
+        {
+            id: '3',
+            firstName: 'Mary',
+            lastName: 'Lopez',
+            email: 'mary@example.com',
+            country: 'Brazil',
+            status: 'Pending',
+            submittedAt: '02/02/2024, 2:45 PM',
+        },
+        {
+            id: '4',
+            firstName: 'Li',
+            lastName: 'Zijin',
+            email: 'li@example.com',
+            country: 'South Korea',
+            status: 'Pending',
+            submittedAt: '02/02/2024, 2:45 PM',
+        },
+        {
+            id: '5',
+            firstName: 'Mark',
+            lastName: 'Antonov',
+            email: 'mark@example.com',
+            country: 'Russia',
+            status: 'Pending',
+            submittedAt: '02/02/2024, 2:45 PM',
+        },
+        {
+            id: '6',
+            firstName: 'Jane',
+            lastName: 'Ma',
+            email: 'jane@example.com',
+            country: 'Mexico',
+            status: 'Pending',
+            submittedAt: '02/02/2024, 2:45 PM',
+        },
+        {
+            id: '7',
+            firstName: 'Anand',
+            lastName: 'Jain',
+            email: 'anand@example.com',
+            country: 'Mexico',
+            status: 'Reached Out',
+            submittedAt: '02/02/2024, 2:45 PM',
+        },
+        {
+            id: '8',
+            firstName: 'Anna',
+            lastName: 'Voronova',
+            email: 'anna@example.com',
+            country: 'France',
+            status: 'Pending',
+            submittedAt: '02/02/2024, 2:45 PM',
+        },
+    ];
 
-            // Load leads from localStorage for demo
-            const storedLeads = JSON.parse(localStorage.getItem('leads') || '[]');
-            setLeads(storedLeads);
-            setFilteredLeads(storedLeads);
-        }
-    }, [router]);
+    // Filter and sort leads
+    const filteredLeads = mockLeads
+        .filter(lead => {
+            const matchesSearch =
+                `${lead.firstName} ${lead.lastName}`
+                    .toLowerCase()
+                    .includes(searchQuery.toLowerCase()) ||
+                lead.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                lead.country.toLowerCase().includes(searchQuery.toLowerCase());
 
-    // Filter leads when search query changes
-    useEffect(() => {
-        if (searchQuery.trim() === '') {
-            setFilteredLeads(leads);
-        } else {
-            const query = searchQuery.toLowerCase();
-            const filtered = leads.filter(
-                lead =>
-                    lead.firstName.toLowerCase().includes(query) ||
-                    lead.lastName.toLowerCase().includes(query) ||
-                    lead.email.toLowerCase().includes(query),
-            );
-            setFilteredLeads(filtered);
-        }
-    }, [searchQuery, leads]);
+            const matchesStatus =
+                statusFilter === 'all' || lead.status.toLowerCase() === statusFilter.toLowerCase();
 
-    const handleLogout = () => {
-        localStorage.removeItem('isAuthenticated');
-        localStorage.removeItem('user');
-        router.push('/login');
+            return matchesSearch && matchesStatus;
+        })
+        .sort((a, b) => {
+            const aValue = a[sortConfig.key];
+            const bValue = b[sortConfig.key];
+
+            if (aValue < bValue) {
+                return sortConfig.direction === 'asc' ? -1 : 1;
+            }
+            if (aValue > bValue) {
+                return sortConfig.direction === 'asc' ? 1 : -1;
+            }
+            return 0;
+        });
+
+    // Pagination
+    const totalPages = Math.ceil(filteredLeads.length / ITEMS_PER_PAGE);
+    const paginatedLeads = filteredLeads.slice(
+        (currentPage - 1) * ITEMS_PER_PAGE,
+        currentPage * ITEMS_PER_PAGE,
+    );
+
+    const handleSort = (key: keyof Lead) => {
+        setSortConfig(current => ({
+            key,
+            direction: current.key === key && current.direction === 'asc' ? 'desc' : 'asc',
+        }));
     };
 
-    const handleStatusChange = (leadId: string) => {
-        const updatedLeads = leads.map(lead =>
-            lead.id === leadId ? { ...lead, status: 'REACHED_OUT' as const } : lead,
-        );
-
-        setLeads(updatedLeads);
-        setFilteredLeads(
-            filteredLeads.map(lead =>
-                lead.id === leadId ? { ...lead, status: 'REACHED_OUT' as const } : lead,
-            ),
-        );
-
-        // Update localStorage for demo
-        localStorage.setItem('leads', JSON.stringify(updatedLeads));
-
-        // If the selected lead is the one being updated, update it too
-        if (selectedLead && selectedLead.id === leadId) {
-            setSelectedLead({ ...selectedLead, status: 'REACHED_OUT' });
+    const SortIcon = ({ columnKey }: { columnKey: keyof Lead }) => {
+        if (sortConfig.key !== columnKey) {
+            return <ChevronDown className='ml-1 h-4 w-4 text-gray-400' />;
         }
-    };
-
-    const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString();
-    };
-
-    if (!isAuthenticated) {
-        return null; // Don't render anything while checking authentication
-    }
-
-    if (selectedLead) {
-        return (
-            <div className='space-y-6'>
-                <div className='flex items-center'>
-                    <Button
-                        variant='outline'
-                        size='sm'
-                        onClick={() => setSelectedLead(null)}
-                        className='mr-2'
-                    >
-                        Back to List
-                    </Button>
-                    <h2 className='text-xl font-semibold'>
-                        Lead Details: {selectedLead.firstName} {selectedLead.lastName}
-                    </h2>
-                </div>
-
-                <LeadDetails lead={selectedLead} onStatusChange={handleStatusChange} />
-            </div>
+        return sortConfig.direction === 'asc' ? (
+            <ChevronDown className='ml-1 h-4 w-4' />
+        ) : (
+            <ChevronDown className='ml-1 h-4 w-4 rotate-180 transform' />
         );
-    }
+    };
 
     return (
-        <div className='space-y-6'>
-            <div className='flex flex-col justify-between gap-4 sm:flex-row sm:items-center'>
-                <div>
-                    <h2 className='text-2xl font-bold tracking-tight'>Lead Management</h2>
-                    <p className='text-muted-foreground'>View and manage all submitted leads</p>
-                </div>
-                <Button variant='outline' size='sm' onClick={handleLogout}>
-                    <LogOutIcon className='mr-2 h-4 w-4' />
-                    Logout
-                </Button>
-            </div>
-
+        <div className='space-y-4'>
             <div className='flex items-center gap-4'>
                 <div className='relative flex-1'>
-                    <SearchIcon className='absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground' />
+                    <SearchIcon className='absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400' />
                     <Input
-                        placeholder='Search leads by name or email...'
-                        className='pl-8'
+                        placeholder='Search'
                         value={searchQuery}
                         onChange={e => setSearchQuery(e.target.value)}
+                        className='pl-9'
                     />
+                </div>
+                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                    <SelectTrigger className='w-[180px]'>
+                        <SelectValue placeholder='Status' />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value='all'>All Status</SelectItem>
+                        <SelectItem value='pending'>Pending</SelectItem>
+                        <SelectItem value='reached out'>Reached Out</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+
+            <div className='rounded-md border'>
+                <div className='grid grid-cols-4 gap-4 border-b bg-gray-50/50 p-4 text-sm font-medium text-gray-500'>
+                    <button onClick={() => handleSort('lastName')} className='flex items-center'>
+                        Name
+                        <SortIcon columnKey='lastName' />
+                    </button>
+                    <button onClick={() => handleSort('submittedAt')} className='flex items-center'>
+                        Submitted
+                        <SortIcon columnKey='submittedAt' />
+                    </button>
+                    <button onClick={() => handleSort('status')} className='flex items-center'>
+                        Status
+                        <SortIcon columnKey='status' />
+                    </button>
+                    <button onClick={() => handleSort('country')} className='flex items-center'>
+                        Country
+                        <SortIcon columnKey='country' />
+                    </button>
+                </div>
+
+                <div className='divide-y'>
+                    {paginatedLeads.map(lead => (
+                        <div
+                            key={lead.id}
+                            className='grid grid-cols-4 gap-4 p-4 text-sm hover:bg-gray-50'
+                        >
+                            <div>
+                                {lead.firstName} {lead.lastName}
+                            </div>
+                            <div>{lead.submittedAt}</div>
+                            <div>{lead.status}</div>
+                            <div>{lead.country}</div>
+                        </div>
+                    ))}
                 </div>
             </div>
 
-            <Card>
-                <CardHeader>
-                    <CardTitle>Leads</CardTitle>
-                    <CardDescription>
-                        {filteredLeads.length} {filteredLeads.length === 1 ? 'lead' : 'leads'} found
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    {filteredLeads.length === 0 ? (
-                        <div className='flex flex-col items-center justify-center py-12 text-center'>
-                            <UserIcon className='mb-4 h-12 w-12 text-muted-foreground/60' />
-                            <h3 className='text-lg font-semibold'>No leads found</h3>
-                            <p className='text-muted-foreground'>
-                                {leads.length === 0
-                                    ? 'No leads have been submitted yet.'
-                                    : 'No leads match your search criteria.'}
-                            </p>
-                        </div>
-                    ) : (
-                        <div className='overflow-x-auto'>
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Name</TableHead>
-                                        <TableHead>Email</TableHead>
-                                        <TableHead>Submission Date</TableHead>
-                                        <TableHead>Status</TableHead>
-                                        <TableHead className='text-right'>Actions</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {filteredLeads.map(lead => (
-                                        <TableRow key={lead.id}>
-                                            <TableCell className='font-medium'>
-                                                {lead.firstName} {lead.lastName}
-                                            </TableCell>
-                                            <TableCell>{lead.email}</TableCell>
-                                            <TableCell>{formatDate(lead.createdAt)}</TableCell>
-                                            <TableCell>
-                                                <Badge
-                                                    variant={
-                                                        lead.status === 'PENDING'
-                                                            ? 'outline'
-                                                            : 'default'
-                                                    }
-                                                >
-                                                    {lead.status}
-                                                </Badge>
-                                            </TableCell>
-                                            <TableCell className='text-right'>
-                                                <Button
-                                                    variant='ghost'
-                                                    size='sm'
-                                                    onClick={() => setSelectedLead(lead)}
-                                                >
-                                                    View Details
-                                                    <ArrowRightIcon className='ml-2 h-4 w-4' />
-                                                </Button>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </div>
-                    )}
-                </CardContent>
-            </Card>
+            <div className='flex items-center justify-end gap-2'>
+                <Button
+                    variant='outline'
+                    size='sm'
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                >
+                    Previous
+                </Button>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                    <Button
+                        key={page}
+                        variant={currentPage === page ? 'default' : 'outline'}
+                        size='sm'
+                        onClick={() => setCurrentPage(page)}
+                    >
+                        {page}
+                    </Button>
+                ))}
+                <Button
+                    variant='outline'
+                    size='sm'
+                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                    disabled={currentPage === totalPages}
+                >
+                    <ChevronRight className='h-4 w-4' />
+                </Button>
+            </div>
         </div>
     );
 }

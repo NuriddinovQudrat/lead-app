@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -37,13 +37,22 @@ export function LoginForm() {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
 
+    // Set default credentials
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            email: '',
-            password: '',
+            email: 'test@gmail.com',
+            password: '12345678',
         },
     });
+
+    // Check if already logged in
+    useEffect(() => {
+        const isAuthenticated = localStorage.getItem('isAuthenticated');
+        if (isAuthenticated === 'true') {
+            router.push('/dashboard');
+        }
+    }, [router]);
 
     async function onSubmit(data: FormValues) {
         setIsLoading(true);
@@ -53,9 +62,11 @@ export function LoginForm() {
             await new Promise(resolve => setTimeout(resolve, 1000));
 
             // For demo purposes, accept any login with valid format
+            // In a real app, you would validate credentials against your backend
             localStorage.setItem('isAuthenticated', 'true');
             localStorage.setItem('user', JSON.stringify({ email: data.email }));
 
+            // Navigate to dashboard
             router.push('/dashboard');
         } catch (error) {
             console.error('Login error:', error);
@@ -122,9 +133,12 @@ export function LoginForm() {
                     </form>
                 </Form>
             </CardContent>
-            <CardFooter className='flex justify-center'>
+            <CardFooter className='flex flex-col gap-2 text-center'>
                 <p className='text-sm text-muted-foreground'>
-                    For demo purposes, any valid email/password will work
+                    Default credentials are pre-filled for demo purposes
+                </p>
+                <p className='text-xs text-muted-foreground'>
+                    Email: test@gmail.com | Password: 12345678
                 </p>
             </CardFooter>
         </Card>
