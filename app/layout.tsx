@@ -1,6 +1,8 @@
+import NextTopLoaderProvider from '@/components/shared/next-top-loader';
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono, Onest } from 'next/font/google';
+import { Onest } from 'next/font/google';
 import './globals.css';
+import { Suspense } from '@/components/suspense';
 
 const onest = Onest({
     weight: ['200', '400', '500', '600', '700', '800', '900'],
@@ -18,7 +20,12 @@ export default function RootLayout({
 }>) {
     return (
         <html lang='en'>
-            <body className={onest.className}>{children}</body>
+            <body className={onest.className}>
+                <Suspense>
+                    <NextTopLoaderProvider />
+                    {children}
+                </Suspense>
+            </body>
         </html>
     );
 }
