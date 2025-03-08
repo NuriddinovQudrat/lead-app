@@ -23,21 +23,38 @@ import { countries } from '@/constants/countries';
 import { visaOptions } from '@/constants/visa-options';
 import Image from 'next/image';
 import { usePage } from './use-page';
-import { LogInIcon } from 'lucide-react';
+import { LayoutDashboard, LogInIcon } from 'lucide-react';
 import Link from 'next/link';
 import { ROUTER } from '@/constants/router';
+import { useUserStore } from '@/store/user';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
     const { form, onSubmit } = usePage();
+    const { hasAccess } = useUserStore(state => state);
+
+    const [loggedIn, setLoggedIn] = useState(false);
+
+    useEffect(() => {
+        setLoggedIn(hasAccess);
+    }, [hasAccess]);
 
     return (
         <div className='min-h-screen container mx-auto p-5'>
             <div className='text-right'>
-                <Link href={ROUTER.ADMIN}>
-                    <Button className='text-xs'>
-                        <LogInIcon /> Admin
-                    </Button>
-                </Link>
+                {loggedIn ? (
+                    <Link href={ROUTER.ADMIN}>
+                        <Button className='text-xs'>
+                            <LayoutDashboard /> Admin
+                        </Button>
+                    </Link>
+                ) : (
+                    <Link href={ROUTER.LOGIN}>
+                        <Button className='text-xs'>
+                            <LogInIcon /> Log in
+                        </Button>
+                    </Link>
+                )}
             </div>
             <div className='text-center py-20'>
                 <h2 className='lg:text-4xl text-2xl font-bold'>

@@ -21,7 +21,7 @@ import { Input } from '@/components/ui/input';
 import { usePage } from './use-page';
 
 export default function LoginPage() {
-    const { form, onSubmit } = usePage();
+    const { form, onSubmit, isLoading } = usePage();
 
     return (
         <div className='flex min-h-screen justify-center items-center'>
@@ -70,7 +70,12 @@ export default function LoginPage() {
                                     {form.formState.errors.root.message}
                                 </p>
                             )}
-                            <Button type='submit' className='w-full'>
+                            <Button
+                                type='submit'
+                                className='w-full'
+                                loading={isLoading}
+                                disabled={isLoading}
+                            >
                                 Log in
                             </Button>
                         </form>
