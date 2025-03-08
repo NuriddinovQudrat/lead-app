@@ -1,9 +1,5 @@
 export const statuses = [
     {
-        label: 'All',
-        value: 'all',
-    },
-    {
         label: 'Pending',
         value: 'pending',
     },

@@ -5,5 +5,6 @@ export const ROUTER = {
     ADMIN: '/admin',
     SETTINGS: '/settings',
     LEADS: '/leads',
+    THANK_YOU: '/thank-you',
     NOT_FOUND: '*',
 };

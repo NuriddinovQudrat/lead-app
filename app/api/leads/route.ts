@@ -1,8 +1,31 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
-// In a real application, this would connect to a database
-// For this demo, we'll use an in-memory store
-const leads: any[] = [];
+const leads: any[] = [
+    // {
+    //     id: 1,
+    //     first_name: 'Qudratjon',
+    //     last_name: 'Nuriddinov',
+    //     email: 'qudratjonnuriddinov2603@gmail.com',
+    //     linkedin: 'https://www.linkedin.com/in/nuriddinovqudratjon',
+    //     citizenship: 'Uzbekistan',
+    //     visas: ['0-1'],
+    //     additional: 'TEST',
+    //     status: 'pending',
+    //     created_at: new Date().toISOString(),
+    // },
+    // {
+    //     id: 2,
+    //     first_name: 'Qudratjon2',
+    //     last_name: 'Nuriddinov2',
+    //     email: 'qudratjonnuriddinov2603@gmail.com',
+    //     linkedin: 'https://www.linkedin.com/in/nuriddinovqudratjon',
+    //     citizenship: 'Uzbekistan',
+    //     visas: ['0-1'],
+    //     additional: 'TEST',
+    //     status: 'reached_out',
+    //     created_at: new Date().toISOString(),
+    // },
+];
 
 export async function GET() {
     return NextResponse.json({ leads });
@@ -42,5 +65,26 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ success: true, lead: newLead });
     } catch (error) {
         return NextResponse.json({ error: 'Failed to create lead' }, { status: 500 });
+    }
+}
+
+export async function PUT(request: NextRequest) {
+    try {
+        const { id, status } = await request.json();
+
+        if (!id || !status || !['pending', 'reached_out'].includes(status)) {
+            return NextResponse.json({ error: 'Invalid data or status' }, { status: 400 });
+        }
+
+        const lead = leads.find(lead => lead.id === id);
+
+        if (!lead) {
+            return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
+        }
+
+        lead.status = status;
+        return NextResponse.json({ success: true, lead });
+    } catch (error) {
+        return NextResponse.json({ error: 'Failed to update lead status' }, { status: 500 });
     }
 }

@@ -46,5 +46,5 @@ export const usePage = () => {
         fetchData();
     }, []);
 
-    return { form, isLoading, error, data };
+    return { form, isLoading, error, data, fetchData };
 };

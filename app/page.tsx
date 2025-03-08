@@ -30,7 +30,7 @@ import { useUserStore } from '@/store/user';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
-    const { form, onSubmit } = usePage();
+    const { form, onSubmit, isLoading } = usePage();
     const { hasAccess } = useUserStore(state => state);
 
     const [loggedIn, setLoggedIn] = useState(false);
@@ -229,7 +229,13 @@ export default function Home() {
                             />
                         </div>
 
-                        <Button size={'lg'} type='submit' className='w-full cursor-pointer'>
+                        <Button
+                            size={'lg'}
+                            type='submit'
+                            className='w-full cursor-pointer'
+                            loading={isLoading}
+                            disabled={isLoading}
+                        >
                             Submit
                         </Button>
                     </div>
