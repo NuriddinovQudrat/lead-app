@@ -23,7 +23,7 @@ const Filter = () => {
                     render={({ field }) => (
                         <FormItem>
                             <FormControl>
-                                <Input placeholder='Search' {...field} className='w-72' />
+                                <Input placeholder='Search' {...field} className='sm:w-72' />
                             </FormControl>
                         </FormItem>
                     )}
@@ -35,7 +35,7 @@ const Filter = () => {
                         <FormItem>
                             <Select onValueChange={field.onChange}>
                                 <FormControl>
-                                    <SelectTrigger className='w-72'>
+                                    <SelectTrigger className='sm:w-72'>
                                         <SelectValue placeholder='Select a status' />
                                     </SelectTrigger>
                                 </FormControl>
